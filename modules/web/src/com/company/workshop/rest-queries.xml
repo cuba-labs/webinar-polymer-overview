@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<queries xmlns="http://schemas.haulmont.com/cuba/rest-queries.xsd">
+    <query name="spareParts" entity="workshop$SparePart" view="_local">
+        <jpql>
+            <![CDATA[
+                select sp from workshop$SparePart sp where sp.price >= :minPrice and sp.price <= :maxPrice
+            ]]>
+        </jpql>
+        <params>
+            <param name="minPrice" type="java.lang.Integer"/>
+            <param name="maxPrice" type="java.lang.Integer"/>
+        </params>
+    </query>
+</queries>
