@@ -1,0 +1,89 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/cuba-app/cuba-localize-behavior.html">
+<link rel="import" href="../bower_components/cuba-ui/cuba-entity-list-view-behavior.html">
+<link rel="import" href="../bower_components/cuba-styles/cuba-styles.html">
+<link rel="import" href="shared-styles.html">
+
+
+<dom-module id="spare-parts-list">
+  <template>
+    <style include="cuba-styles"></style>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
+      .filter paper-input {
+        display: inline-block;
+      }
+    </style>
+    <cuba-query id="data"
+                entity-name="workshop$SparePart"
+                query-name="spareParts"
+                params="[[queryParams]]"
+                data="{{entities}}"
+                loading="{{dataLoading}}"
+                provide-count="true"
+                count="{{entitiesCount}}"
+                auto="[[active]]">
+    </cuba-query>
+
+    <paper-toolbar id="toolbar" class="list-toolbar">
+
+      <div class="filter">
+        <paper-input value="{{queryParams.minPrice}}"
+                     label="minPrice"
+
+
+                     error-message="[[serverErrors.minPrice]]"
+                     invalid="[[_isInvalid(serverErrors.minPrice)]]">
+        </paper-input>
+        <paper-input value="{{queryParams.maxPrice}}"
+                     label="maxPrice"
+
+
+                     error-message="[[serverErrors.maxPrice]]"
+                     invalid="[[_isInvalid(serverErrors.maxPrice)]]">
+        </paper-input>
+
+      </div>
+
+      <span class="title">
+        <paper-spinner active="[[dataLoading]]"></paper-spinner>
+      </span>
+      <paper-icon-button icon="refresh"
+                         on-tap="reload"></paper-icon-button>
+    </paper-toolbar>
+    <iron-selector id="selector" on-iron-activate="_handleSelectionChange" class="item-list">
+      <template id="entitiesList" is="dom-repeat" items="{{entities}}">
+        <div class="row">
+          <div class="title">[[item._instanceName]]</div>
+        </div>
+      </template>
+    </iron-selector>
+    </div>
+    <template is="dom-if" if="[[moreDataAvailable]]">
+      <paper-button on-tap="_loadMore" class="load-more">
+        Load more
+      </paper-button>
+    </template>
+  </template>
+  <script>
+      Polymer({
+          is: 'spare-parts-list',
+          behaviors: [CubaLocalizeBehavior, CubaEntityListViewBehavior],
+          properties: {
+              queryParams: {
+                  type: Object,
+                  value: {
+                      offset: 0,
+                      limit: 10,
+                      minPrice: 50,
+                      maxPrice: 150,
+
+                  }
+              }
+          }
+      });
+  </script>
+</dom-module>

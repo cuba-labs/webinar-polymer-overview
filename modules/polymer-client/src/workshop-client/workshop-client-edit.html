@@ -1,0 +1,79 @@
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/cuba-app/cuba-localize-behavior.html">
+<link rel="import" href="../../bower_components/cuba-ui/cuba-entity-edit-view-behavior.html">
+<link rel="import" href="../../bower_components/cuba-ui/cuba-lookup.html">
+<link rel="import" href="../../bower_components/cuba-data/cuba-entity.html">
+<link rel="import" href="../../bower_components/cuba-form/cuba-entity-form.html">
+<link rel="import" href="../../bower_components/cuba-file-field/cuba-file-field.html">
+<link rel="import" href="../../bower_components/cuba-styles/cuba-styles.html">
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="workshop-client-edit">
+  <template>
+    <style include="cuba-styles"></style>
+    <style include="shared-styles"></style>
+    <style>
+      paper-card {
+        display: block;
+      }
+    </style>
+
+    <cuba-entity entity-name="workshop$Client" entity-id="[[entityId]]" view="_local" data="{{entity}}"></cuba-entity>
+    <cuba-entity-form id="form"
+                      entity-name="workshop$Client"
+                      entity="{{entity}}"
+                      on-cuba-form-response="_onSuccess"
+                      on-cuba-form-error="_onError"
+                      server-errors="{{serverErrors}}">
+      <paper-card>
+        <div class="card-content">
+
+        <paper-input value="{{entity.name}}"
+             label="[[msg('workshop$Client.name')]]"
+             required
+             maxlength="255"
+             error-message="[[serverErrors.name]]"
+             invalid="[[_isInvalid(serverErrors.name)]]">
+</paper-input>
+<paper-input value="{{entity.phoneNumber}}"
+             label="[[msg('workshop$Client.phoneNumber')]]"
+             required
+             maxlength="20"
+             error-message="[[serverErrors.phoneNumber]]"
+             invalid="[[_isInvalid(serverErrors.phoneNumber)]]">
+</paper-input>
+<paper-input value="{{entity.email}}"
+             label="[[msg('workshop$Client.email')]]"
+             required
+             maxlength="50"
+             error-message="[[serverErrors.email]]"
+             invalid="[[_isInvalid(serverErrors.email)]]">
+</paper-input>
+
+
+        </div>
+        <div class="card-actions">
+          <paper-button on-tap="_delete" hidden$="[[!entityId]]">
+            [[msg('Delete')]]
+          </paper-button>
+          <paper-button on-tap="_cancel">
+            [[msg('Cancel')]]
+          </paper-button>
+          <paper-button on-tap="_save">
+            [[msg('Save')]]
+          </paper-button>
+        </div>
+      </paper-card>
+    </cuba-entity-form>
+
+    <paper-toast id="errorMessage">[[msg('Failed to save')]]</paper-toast>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'workshop-client-edit',
+      behaviors: [CubaLocalizeBehavior, CubaEntityEditViewBehavior]
+    });
+  </script>
+</dom-module>

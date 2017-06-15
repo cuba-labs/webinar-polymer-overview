@@ -1,0 +1,111 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/cuba-app/cuba-localize-behavior.html">
+<link rel="import" href="../../bower_components/cuba-ui/cuba-entity-edit-view-behavior.html">
+<link rel="import" href="../../bower_components/cuba-ui/cuba-lookup.html">
+<link rel="import" href="../../bower_components/cuba-data/cuba-entity.html">
+<link rel="import" href="../../bower_components/cuba-form/cuba-entity-form.html">
+<link rel="import" href="../../bower_components/cuba-file-field/cuba-file-field.html">
+<link rel="import" href="../../bower_components/cuba-styles/cuba-styles.html">
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="workshop-order-edit">
+  <template>
+    <style include="cuba-styles"></style>
+    <style include="shared-styles"></style>
+    <style>
+      paper-card {
+        display: block;
+      }
+    </style>
+
+    <cuba-entity entity-name="workshop$Order" entity-id="[[entityId]]" view="order-view"
+                 data="{{entity}}"></cuba-entity>
+    <cuba-entity-form id="form"
+                      entity-name="workshop$Order"
+                      entity="{{entity}}"
+                      on-cuba-form-response="_onSuccess"
+                      on-cuba-form-error="_onError"
+                      server-errors="{{serverErrors}}">
+      <paper-card>
+        <div class="card-content">
+
+          <cuba-lookup picked-entity="{{entity.client}}">
+            <div class="dropdown">
+              <cuba-entities entity-name="workshop$Client" view="_minimal"
+                             data="{{entity_clientOptions}}"></cuba-entities>
+              <vaadin-combo-box label="[[msg('workshop$Order.client')]]"
+                                items="[[entity_clientOptions]]"
+                                selected-item="{{entity.client}}"
+                                item-label-path="_instanceName"
+                                item-value-path="id"
+                                value="[[entity.client.id]]"
+                                required
+                                error-message="[[serverErrors.client]]"
+                                invalid="[[_isInvalid(serverErrors.client)]]">
+              </vaadin-combo-box>
+            </div>
+          </cuba-lookup>
+          <cuba-lookup picked-entity="{{entity.mechanic}}">
+            <div class="dropdown">
+              <cuba-entities entity-name="workshop$Mechanic" view="_minimal"
+                             data="{{entity_mechanicOptions}}"></cuba-entities>
+              <vaadin-combo-box label="[[msg('workshop$Order.mechanic')]]"
+                                items="[[entity_mechanicOptions]]"
+                                selected-item="{{entity.mechanic}}"
+                                item-label-path="_instanceName"
+                                item-value-path="id"
+                                value="[[entity.mechanic.id]]"
+                                required
+                                error-message="[[serverErrors.mechanic]]"
+                                invalid="[[_isInvalid(serverErrors.mechanic)]]">
+              </vaadin-combo-box>
+            </div>
+          </cuba-lookup>
+          <paper-input value="{{entity.description}}"
+                       label="[[msg('workshop$Order.description')]]"
+
+
+                       error-message="[[serverErrors.description]]"
+                       invalid="[[_isInvalid(serverErrors.description)]]">
+          </paper-input>
+          <paper-input type="number"
+                       value="{{entity.hoursSpent}}"
+                       label="[[msg('workshop$Order.hoursSpent')]]"
+
+                       error-message="[[serverErrors.hoursSpent]]"
+                       invalid="[[_isInvalid(serverErrors.hoursSpent)]]">
+          </paper-input>
+          <vaadin-combo-box label="[[msg('workshop$Order.status')]]"
+                            items="[[enumValues('com.company.workshop.entity.OrderStatus')]]"
+                            value="{{entity.status}}"
+                            error-message="[[serverErrors.status]]"
+                            invalid="[[_isInvalid(serverErrors.status)]]"
+          >
+          </vaadin-combo-box>
+
+
+        </div>
+        <div class="card-actions">
+          <paper-button on-tap="_delete" hidden$="[[!entityId]]">
+            [[msg('Delete')]]
+          </paper-button>
+          <paper-button on-tap="_cancel">
+            [[msg('Cancel')]]
+          </paper-button>
+          <paper-button on-tap="_save">
+            [[msg('Save')]]
+          </paper-button>
+        </div>
+      </paper-card>
+    </cuba-entity-form>
+
+    <paper-toast id="errorMessage">[[msg('Failed to save')]]</paper-toast>
+
+  </template>
+  <script>
+      Polymer({
+          is: 'workshop-order-edit',
+          behaviors: [CubaLocalizeBehavior, CubaEntityEditViewBehavior]
+      });
+  </script>
+</dom-module>
