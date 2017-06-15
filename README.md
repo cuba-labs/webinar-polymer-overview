@@ -1,4 +1,2 @@
-# workshop
-CUBA Platform Webinar
-
-See complete tutorial in webinar-steps.pdf
+# Introduction to Polymer Client
+CUBA Platform webinar
